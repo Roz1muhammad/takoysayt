@@ -27,7 +27,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
+jkl;
     email = False
     last_name = False
     first_name = False
