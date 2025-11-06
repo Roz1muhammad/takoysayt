@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takoy Blog - Asosiy Sahifa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-green-50 to-pink-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-6 shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-4xl font-extrabold tracking-wider gradient-text">Takoy Blog</h1>
+            <nav class="space-x-6">
+                <a href="{% url 'home' %}" class="hover:text-pink-200 font-semibold text-lg">Asosiy</a>
+                <a href="{% url 'register' %}" class="hover:text-pink-200 font-semibold text-lg">Registratsiya</a>
+                <a href="{% url 'add_post' %}" class="hover:text-pink-200 font-semibold text-lg">Post Qo‘shish</a>
+                 <a href="{% url 'login' %}" class="hover:text-pink-200 font-semibold text-lg">login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="container mx-auto py-12 px-4">
+        {% for post in posts %}
+        <article class="bg-white rounded-3xl p-8 mb-10 shadow-2xl hover:shadow-3xl transition-shadow duration-500">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-72 object-cover rounded-xl mb-6">
+            {% endif %}
+
+            <h2 class="text-3xl font-bold text-gray-800 mb-3">{{ post.title }}</h2>
+            <p class="text-gray-700 mb-6 text-lg">{{ post.decs }}</p>
+
+            <!-- Commentlar -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Kommentlar</h3>
+                {% for comment in post.comments.all %}
+                    <div class="border-b border-gray-200 py-2">
+                        <p class="text-sm font-semibold">{{ comment.user.username }}</p>
+                        <p class="text-gray-700">{{ comment.message }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-gray-500">Hozircha komment yo‘q.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Comment form -->
+            <form method="post" class="space-y-2">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <textarea name="message" placeholder="Komment yozing" required
+                          class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Komment Yuborish</button>
+            </form>
+        </article>
+        {% empty %}
+        <p class="text-center text-gray-600 text-xl">Hozircha postlar yo‘q.</p>
+        {% endfor %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p class="text-lg">© 2025 Takoy Blog. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+</body>
+</html>
